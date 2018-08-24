@@ -1,8 +1,9 @@
 /******************************************************************************
 * file Name : r_clock.c
-* version   : 0.1
+* version   : 0.2
 * Argument      : andy
 * data  : 2018/8/24
+* descripy: 16MHz PLL=80MHz 
 ******************************************************************************/
 #include	<string.h>
 #include 	"r_typedefs.h"
@@ -14,7 +15,7 @@
 #ifdef __IAR_SYSTEMS_ICC__
 	#include <intrinsics.h>
 #endif
-
+#define OSCLOCK 16
 /******************************************************************************
 Exported global variables and functions (to be accessed by other files)
 ******************************************************************************/
@@ -48,15 +49,20 @@ static void osc_clock( void )
     /* Amplification gain of the MainOSC
     MOSCC  - MainOSC Control Register
     b31:b2               - Reserved set to 0
+#if OSCLOCK == 8
     b0       MOSCAMPSEL  - MainOSC Frequency - 8 MHz */
     MOSCC                = 0x00000002UL;
-
+#elif OSCLOCK == 16
+    /*b0       MOSCAMPSEL  - MainOSC Frequency - 16 MHz */
+    MOSCC                = 0x00000001UL;
+//    MOSCC                = 0x00000005UL;
+#endif
 
     /* Main OSC stabilization time setup
     MOSCST - MainOSC Stabilization Time Register
     b31:b17              - Reserved set to 0
-    b16:b 0  MOSCCLKST   - Count value for the MainOSC stabilization counter - (1FFFFH / fRH) */
-    MOSCST               = 0x0001FFFFUL;
+    b16:b 0  MOSCCLKST   - Count value for the MainOSC stabilization counter - (FFFFH / fRH) */
+    MOSCST               = 0x0000FFFFUL;
 
 
     /* Main OSC on
@@ -210,7 +216,7 @@ static void set_clock_domain( void )
     /* Source Clock Setting for   C_ISO_LIN  
     CKSC_ILINS_CTL	 -   C_ISO_LIN   Source Clock Selection Register
     b31:b 2                        - Reserved set to 0
-    b 1:b 0              ILINSCSID - Source Clock Setting for  C_ISO_LIN  - PPLLCLK/2 */
+    b 1:b 0              ILINSCSID - Source Clock Setting for  C_ISO_LIN  - PPLLCLK2 */
 
     do
     {
