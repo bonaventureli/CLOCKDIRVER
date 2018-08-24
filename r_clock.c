@@ -25,8 +25,6 @@ Private global variables and functions
 ******************************************************************************/
 static  void    osc_clock( void );
 static  void    set_clock_domain( void );
-
-
 /******************************************************************************
 * Function Name : void R_CLOCK_Init( void )
 * Description   : This function initializes the clock.
@@ -38,8 +36,6 @@ void R_CLOCK_Init( void )
     osc_clock();                                /* Clock oscillation         */
     set_clock_domain();                         /* Domain clock setting      */
 }
-
-
 /******************************************************************************
 * Function Name : static void osc_clock( void )
 * Description   : This function oscillates the clock (main , sub and PLL clock).
